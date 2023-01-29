@@ -4,6 +4,7 @@ import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:n_baz/models/category_model.dart';
 import 'package:n_baz/models/product_model.dart';
 import 'package:n_baz/viewmodels/auth_viewmodel.dart';
@@ -43,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _authViewModel.getMyProducts();
   }
 
+  double rating = 0;
   @override
   Widget build(BuildContext context) {
     final List<String> imgList = [
@@ -71,9 +73,17 @@ class _HomeScreenState extends State<HomeScreen> {
       return Container(
         child: Stack(
           children: [
+            HomeHeader(authVM),
             Positioned.fill(
               child: Container(
-                margin: EdgeInsets.only(top: 60),
+                decoration: BoxDecoration(
+                  color: Color(0xFFF57C00),
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(35),
+                    topLeft: Radius.circular(35),
+                  ),
+                ),
+                margin: EdgeInsets.only(top: 80),
                 child: RefreshIndicator(
                   onRefresh: refresh,
                   child: SingleChildScrollView(
@@ -140,7 +150,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            HomeHeader(authVM),
           ],
         ),
       );
@@ -154,15 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
             width: double.infinity,
             height: 60,
             decoration: BoxDecoration(
-              color: Colors.deepOrange,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 7,
-                  offset: Offset(0, 3), // changes position of shadow
-                ),
-              ],
+              color: Colors.transparent,
             ),
             padding: EdgeInsets.all(15),
             child: Row(
@@ -170,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Icon(
                   Icons.shopping_cart,
                   size: 40,
-                  color: Colors.white54,
+                  color: Colors.deepOrangeAccent,
                 ),
                 Text(
                   "HamroPasal",
@@ -178,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white54),
+                      color: Colors.deepOrangeAccent),
                 ),
                 Spacer(),
                 IconButton(
@@ -276,58 +277,87 @@ class _HomeScreenState extends State<HomeScreen> {
         Navigator.of(context).pushNamed("/single-product", arguments: e.id);
       },
       child: Container(
-        width: 250,
-        child: Card(
-          elevation: 0,
-          child: Stack(
-            children: [
-              ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    e.imageUrl.toString(),
-                    height: 300,
-                    width: double.infinity,
+        height: 500,
+        margin: EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+          color: Colors.yellow,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Container(
+                alignment: Alignment.topRight,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Colors.transparent,
+                  image: DecorationImage(
                     fit: BoxFit.cover,
-                    errorBuilder: (BuildContext context, Object exception,
-                        StackTrace? stackTrace) {
-                      return Image.asset(
-                        'assets/images/logo.png',
-                        height: 300,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      );
-                    },
-                  )),
-              Positioned.fill(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(vertical: 5),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.deepOrangeAccent),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            e.productName.toString(),
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                          ),
-                          Text(
-                            "Rs. " + e.productPrice.toString(),
-                            style: TextStyle(fontSize: 15, color: Colors.green),
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                          ),
-                        ],
-                      )),
+                    image: NetworkImage(
+                      e.imageUrl.toString(),
+                    ),
+                  ),
                 ),
               ),
-            ],
-          ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    e.productName.toString(),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    e.productDescription.toString(),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "\$ ${e.productPrice.toString()}",
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  RatingBar.builder(
+                    itemSize: 21,
+                    minRating: 1,
+                    itemBuilder: (context, _) => Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    onRatingUpdate: (rating) => setState(() {
+                      this.rating = rating;
+                    }),
+                  )
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

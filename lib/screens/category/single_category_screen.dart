@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import '../../models/product_model.dart';
 import '../../viewmodels/global_ui_viewmodel.dart';
@@ -42,6 +43,7 @@ class _SingleCategoryBodyState extends State<SingleCategoryBody> {
     super.initState();
   }
 
+  double rating = 0;
   Future<void> getData(String categoryId) async {
     _ui.loadState(true);
     try {
@@ -60,8 +62,9 @@ class _SingleCategoryBodyState extends State<SingleCategoryBody> {
         child: singleCategoryVM.category == null
             ? Text("Please wait")
             : Scaffold(
+                backgroundColor: Colors.deepOrangeAccent,
                 appBar: AppBar(
-                  backgroundColor: Colors.deepOrangeAccent,
+                  backgroundColor: Colors.transparent,
                 ),
                 body: RefreshIndicator(
                   onRefresh: () => getData(categoryId.toString()),
@@ -73,26 +76,32 @@ class _SingleCategoryBodyState extends State<SingleCategoryBody> {
                             singleCategoryVM.category!.imageUrl != null)
                           Stack(
                             children: [
-                              Image.network(
-                                singleCategoryVM.category!.imageUrl.toString(),
-                                height: 250,
-                                fit: BoxFit.cover,
-                              ),
-                              Positioned.fill(
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Container(
-                                      width: double.infinity,
-                                      decoration:
-                                          BoxDecoration(color: Colors.white70),
-                                      child: Text(
-                                        singleCategoryVM.category!.categoryName
-                                            .toString(),
-                                        style: TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.w700),
-                                      )),
+                              CircleAvatar(
+                                radius: 100,
+                                backgroundImage: NetworkImage(
+                                  singleCategoryVM.category!.imageUrl
+                                      .toString(),
                                 ),
+                                // child: Image.network(
+                                //   singleCategoryVM.category!.imageUrl.toString(),
+                                //   height: 250,
+                                //   fit: BoxFit.cover,
+                                // ),
+                              ),
+                              Positioned(
+                                top: 60,
+                                bottom: 1,
+                                child: Container(
+                                    width: double.infinity,
+                                    decoration:
+                                        BoxDecoration(color: Colors.white70),
+                                    child: Text(
+                                      singleCategoryVM.category!.categoryName
+                                          .toString(),
+                                      style: TextStyle(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.w700),
+                                    )),
                               )
                             ],
                           ),
@@ -130,59 +139,143 @@ class _SingleCategoryBodyState extends State<SingleCategoryBody> {
         Navigator.of(context).pushNamed("/single-product", arguments: e.id);
       },
       child: Container(
-        width: 250,
-        child: Card(
-          elevation: 5,
-          child: Stack(
-            children: [
-              ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: Image.network(
-                    e.imageUrl.toString(),
-                    height: 300,
-                    width: double.infinity,
+        height: 500,
+        margin: EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+          color: Colors.yellow,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Container(
+                alignment: Alignment.topRight,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Colors.transparent,
+                  image: DecorationImage(
                     fit: BoxFit.cover,
-                    errorBuilder: (BuildContext context, Object exception,
-                        StackTrace? stackTrace) {
-                      return Image.asset(
-                        'assets/images/logo.png',
-                        height: 300,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      );
-                    },
-                  )),
-              Positioned.fill(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(vertical: 5),
-                      decoration:
-                          BoxDecoration(color: Colors.white.withOpacity(0.8)),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            e.productName.toString(),
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                          ),
-                          Text(
-                            "Rs. " + e.productPrice.toString(),
-                            style: TextStyle(fontSize: 15, color: Colors.green),
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                          ),
-                        ],
-                      )),
+                    image: NetworkImage(
+                      e.imageUrl.toString(),
+                    ),
+                  ),
                 ),
               ),
-            ],
-          ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    e.productName.toString(),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    e.productDescription.toString(),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "\$ ${e.productPrice.toString()}",
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  RatingBar.builder(
+                    itemSize: 21,
+                    minRating: 1,
+                    itemBuilder: (context, _) => Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    onRatingUpdate: (rating) => setState(() {
+                      this.rating = rating;
+                    }),
+                  )
+                ],
+              ),
+            )
+          ],
         ),
       ),
+      // child: Container(
+      //   width: 250,
+      //   child: Card(
+      //     elevation: 5,
+      //     child: Stack(
+      //       children: [
+      //         ClipRRect(
+      //             borderRadius: BorderRadius.circular(5),
+      //             child: Image.network(
+      //               e.imageUrl.toString(),
+      //               height: 300,
+      //               width: double.infinity,
+      //               fit: BoxFit.cover,
+      //               errorBuilder: (BuildContext context, Object exception,
+      //                   StackTrace? stackTrace) {
+      //                 return Image.asset(
+      //                   'assets/images/HamroPasal.png',
+      //                   height: 300,
+      //                   width: double.infinity,
+      //                   fit: BoxFit.cover,
+      //                 );
+      //               },
+      //             )),
+      //         Positioned.fill(
+      //           child: Align(
+      //             alignment: Alignment.bottomCenter,
+      //             child: Container(
+      //                 width: double.infinity,
+      //                 padding: EdgeInsets.symmetric(vertical: 5),
+      //                 decoration:
+      //                     BoxDecoration(color: Colors.white.withOpacity(0.8)),
+      //                 child: Column(
+      //                   mainAxisSize: MainAxisSize.min,
+      //                   children: [
+      //                     Text(
+      //                       e.productName.toString(),
+      //                       style: TextStyle(fontSize: 20),
+      //                       textAlign: TextAlign.center,
+      //                       maxLines: 2,
+      //                     ),
+      //                     Text(
+      //                       "Rs. " + e.productPrice.toString(),
+      //                       style: TextStyle(fontSize: 15, color: Colors.green),
+      //                       textAlign: TextAlign.center,
+      //                       maxLines: 2,
+      //                     ),
+      //                   ],
+      //                 )),
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
   }
 }
