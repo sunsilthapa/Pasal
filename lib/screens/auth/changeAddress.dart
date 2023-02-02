@@ -31,10 +31,10 @@ class _ChangeEmailState extends State<ChangeEmail> {
     super.initState();
   }
 
-  void editEmail() async {
+  void editAddress() async {
     _ui.loadState(true);
     try {
-      _authViewModel.user?.updateEmail(new_emailController.text);
+      _authViewModel.user?.updateEmail(new_addressController.text);
       FirebaseService.db
           .collection("users")
           .where("user_id", isEqualTo: _authViewModel.user?.uid)
@@ -42,15 +42,15 @@ class _ChangeEmailState extends State<ChangeEmail> {
           .then((querySnapshot) {
         querySnapshot.docs.forEach((doc) {
           doc.reference.set({
-            "email": new_emailController.text,
+            "address": new_addressController.text,
           }, SetOptions(merge: true));
         });
       }).catchError((error) {
-        print("Error updating email : $error");
+        print("Error updating address : $error");
       });
 
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Email updated")));
+          .showSnackBar(SnackBar(content: Text("address updated")));
       Navigator.of(context).pop();
     } catch (e) {
       ScaffoldMessenger.of(context)
@@ -68,9 +68,8 @@ class _ChangeEmailState extends State<ChangeEmail> {
     );
   }
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController new_emailController = TextEditingController();
-  TextEditingController confirm_emailController = TextEditingController();
+  TextEditingController prev_addressController = TextEditingController();
+  TextEditingController new_addressController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthViewModel>(builder: (context, authVM, child) {
@@ -108,21 +107,17 @@ class _ChangeEmailState extends State<ChangeEmail> {
               child: Column(
                 children: <Widget>[
                   Text(
-                    "Previous Email: ",
+                    "Previous Address: ",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 30),
                     child: TextFormField(
-                        controller: emailController,
+                        controller: prev_addressController,
                         validator: (value) {
                           if (value != null || value!.isEmpty) {
-                            final bool isValid = EmailValidator.validate(
-                                emailController.text.trim());
-                            if (!isValid) {
-                              return "Invalid email";
-                            }
+                            return "Invalid email";
                           }
                         },
                         keyboardType: TextInputType.emailAddress,
@@ -136,7 +131,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
                             color: Colors.deepOrange,
                             size: 25,
                           ),
-                          hintText: "Previous email",
+                          hintText: "Previous address",
                           // hintText: "${authVM.loggedInUser?.email.toString()}",
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30),
@@ -155,7 +150,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
               child: Column(
                 children: <Widget>[
                   Text(
-                    "New Email:",
+                    "New Address:",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -166,14 +161,10 @@ class _ChangeEmailState extends State<ChangeEmail> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 30),
                     child: TextFormField(
-                        controller: new_emailController,
+                        controller: new_addressController,
                         validator: (value) {
                           if (value != null || value!.isEmpty) {
-                            final bool isValid = EmailValidator.validate(
-                                new_emailController.text.trim());
-                            if (!isValid) {
-                              return "Invalid email";
-                            }
+                            return "Invalid address";
                           }
                         },
                         keyboardType: TextInputType.emailAddress,
@@ -187,7 +178,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
                             color: Colors.deepOrange,
                             size: 25,
                           ),
-                          hintText: "Enter your new email",
+                          hintText: "Enter your new address",
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30),
                               borderSide: BorderSide.none),
@@ -199,56 +190,6 @@ class _ChangeEmailState extends State<ChangeEmail> {
                 ],
               ),
             ),
-            divider(),
-            Container(
-              padding: EdgeInsets.only(top: 10),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    "Confirm-Email:",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 30),
-                    child: TextFormField(
-                        controller: confirm_emailController,
-                        validator: (value) {
-                          if (value != null || value!.isEmpty) {
-                            final bool isValid = EmailValidator.validate(
-                                confirm_emailController.text.trim());
-                            if (!isValid) {
-                              return "Invalid email";
-                            }
-                          }
-                        },
-                        keyboardType: TextInputType.emailAddress,
-                        cursorColor: Colors.deepOrange,
-                        cursorHeight: 25,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.grey[350],
-                          prefixIcon: Icon(
-                            Icons.email_rounded,
-                            color: Colors.deepOrange,
-                            size: 25,
-                          ),
-                          hintText: "Verify your email",
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: BorderSide.none),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: BorderSide(color: Colors.black38)),
-                        )),
-                  ),
-                ],
-              ),
-            )
           ],
         ),
       ),
@@ -263,7 +204,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
         height: 70,
         child: ElevatedButton(
           onPressed: () {
-            editEmail();
+            editAddress();
             // Add your code for logging out here
           },
           style: ElevatedButton.styleFrom(

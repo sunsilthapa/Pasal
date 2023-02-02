@@ -1,7 +1,9 @@
 import 'dart:ffi';
+import 'dart:math';
 
 import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -156,6 +158,24 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  TextEditingController _searchController = TextEditingController();
+  void performSearch() {
+    String? searchTerm = _searchController.text;
+
+    FirebaseFirestore.instance
+        .collection("products")
+        .where("productName", isEqualTo: searchTerm)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        print("Found user with name: ${doc.data()["productName"]}");
+        Navigator.of(context).pushNamed("/single-product", arguments: doc.id);
+      });
+    }).catchError((error) {
+      print("Error searching in Firestore: $error");
+    });
+  }
+
   Widget HomeHeader(AuthViewModel authVM) {
     return Align(
         alignment: Alignment.topCenter,
@@ -177,18 +197,44 @@ class _HomeScreenState extends State<HomeScreen> {
                   "HamroPasal",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.deepOrangeAccent),
                 ),
                 Spacer(),
-                IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.search,
-                      size: 30,
-                      color: Color(0xFFF57C00),
-                    )),
+                Container(
+                  width: 130,
+                  child: TextFormField(
+                    controller: _searchController,
+                    // autofocus: true,
+                    cursorColor: Colors.deepOrangeAccent,
+                    cursorHeight: 20,
+                    keyboardType: TextInputType.text,
+                    style: const TextStyle(
+                        fontSize: 16.0, color: Colors.deepOrangeAccent),
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.grey.shade300,
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide.none),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide.none),
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            performSearch();
+                          },
+                          child: Icon(
+                            Icons.search,
+                            size: 21.0,
+                            color: Colors.deepOrangeAccent,
+                          ),
+                        ),
+                        hintText: "Search",
+                        hintStyle: TextStyle(fontSize: 12.0)),
+                  ),
+                ),
                 Badge(
                   badgeColor: Colors.red,
                   padding: EdgeInsets.all(7),
@@ -280,7 +326,7 @@ class _HomeScreenState extends State<HomeScreen> {
         height: 500,
         margin: EdgeInsets.all(10.0),
         decoration: BoxDecoration(
-          color: Colors.yellow,
+          color: Color(0xFFFAB540),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(

@@ -142,7 +142,7 @@ class _SingleCategoryBodyState extends State<SingleCategoryBody> {
         height: 500,
         margin: EdgeInsets.all(10.0),
         decoration: BoxDecoration(
-          color: Colors.yellow,
+          color: Color(0xFFFAB540),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(

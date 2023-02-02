@@ -8,7 +8,6 @@ import '../../viewmodels/global_ui_viewmodel.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({Key? key}) : super(key: key);
-
   @override
   State<FavoriteScreen> createState() => _FavoriteScreenState();
 }
@@ -17,6 +16,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   late GlobalUIViewModel _ui;
   late AuthViewModel _authViewModel;
   String? productId;
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -28,11 +28,9 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
 
   Future<void> getInit() async {
     _ui.loadState(true);
-    try{
+    try {
       await _authViewModel.getFavoritesUser();
-    }catch(e){
-
-    }
+    } catch (e) {}
     _ui.loadState(false);
   }
 
@@ -41,13 +39,16 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     _ui.loadState(true);
     try {
       await _authViewModel.favoriteAction(isFavorite, productId);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Favorite updated.")));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Favorite updated.")));
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Something went wrong. Please try again.")));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Something went wrong. Please try again.")));
       print(e);
     }
     _ui.loadState(false);
   }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthViewModel>(builder: (context, authVM, child) {
@@ -56,60 +57,111 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           onRefresh: getInit,
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
-            child:
-            authVM.favoriteProduct == null ?
-            Column(
-              children: [
-                Center(child: Text("Something went wrong")),
-              ],
-            ) :
-            authVM.favoriteProduct!.length == 0
+            child: authVM.favoriteProduct == null
                 ? Column(
                     children: [
-                      Center(child: Text("Please add to favorite")),
+                      Center(child: Text("Something went wrong")),
                     ],
                   )
-                : Column(children: [
-                  SizedBox(height: 10,),
-                    ...authVM.favoriteProduct!.map(
-                      (e) => InkWell(
-                        onTap: (){
-                          Navigator.of(context).pushNamed("/single-product", arguments: e.id!);
-                        },
-                        child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 10),
-                          child: Card(
-                            child: ListTile(
-                              trailing: IconButton(
-                                iconSize: 25,
-                                onPressed: (){
-                                    removeFavorite(_authViewModel.favorites.firstWhere((element) => element.productId == e.id), e.id!);
-                                },
-                                  icon: Icon(Icons.delete_outlined, color: Colors.red,),
-                              ),
-                              leading: ClipRRect(
-                                  borderRadius: BorderRadius.circular(5),
-                                  child: Image.network(
-                                    e.imageUrl.toString(),
-                                    width: 100,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (BuildContext context,
-                                        Object exception, StackTrace? stackTrace) {
-                                      return Image.asset(
-                                        'assets/images/logo.png',
-                                        width: 100,
-                                        fit: BoxFit.cover,
-                                      );
-                                    },
-                                  )),
-                              title: Text(e.productName.toString()),
-                              subtitle: Text(e.productPrice.toString()),
-                            ),
-                          ),
+                : authVM.favoriteProduct!.length == 0
+                    ? Column(
+                        children: [
+                          Center(child: Text("Please add to favorite")),
+                        ],
+                      )
+                    : Column(children: [
+                        SizedBox(
+                          height: 10,
                         ),
-                      ),
-                    )
-                  ]),
+                        ...authVM.favoriteProduct!.map(
+                          (e) => InkWell(
+                            onTap: () {
+                              Navigator.of(context).pushNamed("/single-product",
+                                  arguments: e.id!);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 5.0, horizontal: 5.0),
+                              child: Material(
+                                color: Colors.white,
+                                elevation: 2.0,
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: ListTile(
+                                  trailing: Container(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        removeFavorite(
+                                            _authViewModel.favorites.firstWhere(
+                                                (element) =>
+                                                    element.productId == e.id),
+                                            e.id!);
+                                      },
+                                      child: Icon(Icons.delete_outline,
+                                          color: Colors.pink),
+                                    ),
+                                    height: 30,
+                                    width: 30,
+                                    decoration: BoxDecoration(
+                                      color: Colors.pink.withOpacity(0.09),
+                                      borderRadius: BorderRadius.circular(18),
+                                    ),
+                                  ),
+                                  title: Text(e.productName.toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700)),
+                                  subtitle: Text(e.productPrice.toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700)),
+                                  leading: Container(
+                                    height: 60.0,
+                                    width: 60.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                      image: DecorationImage(
+                                        image: NetworkImage(
+                                          e.imageUrl.toString(),
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // child: Container(
+                            //   margin: EdgeInsets.symmetric(horizontal: 10),
+                            //   child: Card(
+                            //     child: ListTile(
+                            //       trailing: IconButton(
+                            //         iconSize: 25,
+                            //         onPressed: (){
+                            //             removeFavorite(_authViewModel.favorites.firstWhere((element) => element.productId == e.id), e.id!);
+                            //         },
+                            //           icon: Icon(Icons.delete_outlined, color: Colors.red,),
+                            //       ),
+                            //       leading: ClipRRect(
+                            //           borderRadius: BorderRadius.circular(5),
+                            //           child: Image.network(
+                            //             e.imageUrl.toString(),
+                            //             width: 100,
+                            //             fit: BoxFit.cover,
+                            //             errorBuilder: (BuildContext context,
+                            //                 Object exception, StackTrace? stackTrace) {
+                            //               return Image.asset(
+                            //                 'assets/images/logo.png',
+                            //                 width: 100,
+                            //                 fit: BoxFit.cover,
+                            //               );
+                            //             },
+                            //           )),
+                            //       title: Text(e.productName.toString()),
+                            //       subtitle: Text(e.productPrice.toString()),
+                            //     ),
+                            //   ),
+                            // ),
+                          ),
+                        )
+                      ]),
           ),
         ),
       );

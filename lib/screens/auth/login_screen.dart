@@ -227,6 +227,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                     InkWell(
+                      onTap: () {
+                        // final provider =
+                        //     Provider.of<AuthViewModel>(context, listen: false);
+                        // provider.googleLogin(context);
+                        _authViewModel.googleLogin(context);
+                      },
                       child: Container(
                           width: _width * 0.6,
                           height: _height * 0.07,

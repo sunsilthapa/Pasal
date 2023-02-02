@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:n_baz/viewmodels/auth_viewmodel.dart';
 import 'package:provider/provider.dart';
-
 import '../../models/cart_model.dart';
-import '../../models/favorite_model.dart';
 import '../../viewmodels/global_ui_viewmodel.dart';
 
 class CartScreen extends StatefulWidget {
@@ -157,7 +155,7 @@ class _CartScreenState extends State<CartScreen> {
                                             Object exception,
                                             StackTrace? stackTrace) {
                                           return Image.asset(
-                                            'assets/images/logo.png',
+                                            'assets/images/HamroPasal.png',
                                             width: 100,
                                             fit: BoxFit.cover,
                                           );

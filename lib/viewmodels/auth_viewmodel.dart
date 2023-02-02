@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:n_baz/models/cart_model.dart';
 import 'package:n_baz/models/product_model.dart';
 import 'package:n_baz/models/user_model.dart';
@@ -68,6 +69,9 @@ class AuthViewModel with ChangeNotifier {
 
   Future<void> logout() async {
     try {
+      try {
+        await googleSignIn.disconnect();
+      } catch (e) {}
       await AuthRepository().logout();
       _user = null;
       notifyListeners();
@@ -200,14 +204,22 @@ class AuthViewModel with ChangeNotifier {
       notifyListeners();
     } catch (e) {}
   }
+  //
+  // Future<void> editMyEmail(UserModel user, String userId) async {
+  //   try {
+  //     await AuthRepository().editEmail(user: user, userId: userId);
+  //     // await AuthRepository().getUserDetail(_user!.uid);
+  //     notifyListeners();
+  //   } catch (e) {}
+  // }
 
-  Future<void> editMyEmail(UserModel user, String userId) async {
-    try {
-      await AuthRepository().editEmail(user: user, userId: userId);
-      // await AuthRepository().getUserDetail(_user!.uid);
-      notifyListeners();
-    } catch (e) {}
-  }
+  // Future<void> editPassword(UserModel user, String userId) async {
+  //   try {
+  //     await AuthRepository().editPassword(user: user, userId: userId);
+  //     // await AuthRepository().getUserDetail(_user!.uid);
+  //     notifyListeners();
+  //   } catch (e) {}
+  // }
 
   Future<void> deleteMyProduct(String productId) async {
     try {
@@ -218,6 +230,28 @@ class AuthViewModel with ChangeNotifier {
       print(e);
       _myProduct = null;
       notifyListeners();
+    }
+  }
+
+// Google authentication
+  final googleSignIn = GoogleSignIn();
+  GoogleSignInAccount? _usser;
+  GoogleSignInAccount get usser => _usser!;
+  Future googleLogin(context) async {
+    final googleUser = await googleSignIn.signIn();
+    if (googleUser == null) return;
+    _usser = googleUser;
+    final googleAuth = await googleUser.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    notifyListeners();
+    print("------------------------------------");
+    print(FirebaseAuth.instance.currentUser);
+    if (FirebaseAuth.instance.currentUser != null) {
+      Navigator.of(context).pushNamed("/dashboard");
     }
   }
 }

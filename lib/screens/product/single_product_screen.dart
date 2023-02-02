@@ -4,7 +4,6 @@ import 'package:n_baz/models/favorite_model.dart';
 import 'package:n_baz/viewmodels/auth_viewmodel.dart';
 import 'package:provider/provider.dart';
 
-import '../../constants/constants.dart';
 import '../../models/cart_model.dart';
 import '../../viewmodels/global_ui_viewmodel.dart';
 import '../../viewmodels/single_product_viewmodel.dart';
@@ -103,6 +102,221 @@ class _SingleProductBodyState extends State<SingleProductBody> {
     _ui.loadState(false);
   }
 
+  int count = 1;
+
+  Widget _buildColorProduct({required Color color}) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(50),
+        color: color,
+      ),
+      height: 40,
+      width: 40,
+    );
+  }
+
+  List<bool> sized = [true, false, false, false];
+  List<bool> colored = [true, false, false, false];
+  int sizeIndex = 0;
+  late String size;
+  void getSize() {
+    if (sizeIndex == 0) {
+      setState(() {
+        size = "S";
+      });
+    } else if (sizeIndex == 1) {
+      setState(() {
+        size = "M";
+      });
+    } else if (sizeIndex == 2) {
+      setState(() {
+        size = "L";
+      });
+    } else if (sizeIndex == 3) {
+      setState(() {
+        size = "XL";
+      });
+    }
+  }
+
+  int colorIndex = 0;
+  late String color;
+  void getColor() {
+    if (colorIndex == 0) {
+      setState(() {
+        color = "Light Blue";
+      });
+    } else if (colorIndex == 1) {
+      setState(() {
+        color = "Light Green";
+      });
+    } else if (colorIndex == 2) {
+      setState(() {
+        color = "Light Yellow";
+      });
+    } else if (colorIndex == 3) {
+      setState(() {
+        color = "Cyan";
+      });
+    }
+  }
+
+  Widget _buildSizePart() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        SizedBox(
+          height: 10,
+        ),
+        ListTile(
+          leading: Text(
+            "Size",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          ),
+          contentPadding: EdgeInsets.only(right: 10),
+          trailing: Container(
+            width: 250,
+            height: 50,
+            child: ToggleButtons(
+              splashColor: Colors.transparent,
+              renderBorder: false,
+              borderRadius: BorderRadius.circular(50),
+              children: [
+                Text("S"),
+                Text("M"),
+                Text("L"),
+                Text("XL"),
+              ],
+              onPressed: (int index) {
+                setState(() {
+                  for (int indexBtn = 0; indexBtn < sized.length; indexBtn++) {
+                    if (indexBtn == index) {
+                      sized[indexBtn] = true;
+                    } else {
+                      sized[indexBtn] = false;
+                    }
+                  }
+                });
+                setState(() {
+                  sizeIndex = index;
+                });
+              },
+              isSelected: sized,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildColorPart() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        SizedBox(
+          height: 10,
+        ),
+        ListTile(
+          leading: Text(
+            "Color",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          ),
+          contentPadding: EdgeInsets.only(right: 10),
+          trailing: Container(
+            width: 250,
+            child: ToggleButtons(
+              hoverColor: Colors.deepOrangeAccent,
+              borderRadius: BorderRadius.circular(50),
+              // fillColor: Colors.deepOrange.shade50,
+              renderBorder: false,
+              children: [
+                _buildColorProduct(color: Colors.blue),
+                _buildColorProduct(color: Colors.green),
+                _buildColorProduct(color: Colors.yellow),
+                _buildColorProduct(color: Colors.cyan),
+              ],
+              onPressed: (int index) {
+                setState(() {
+                  for (int indexBtn = 0;
+                      indexBtn < colored.length;
+                      indexBtn++) {
+                    if (indexBtn == index) {
+                      colored[indexBtn] = true;
+                    } else {
+                      colored[indexBtn] = false;
+                    }
+                  }
+                });
+                setState(() {
+                  colorIndex = index;
+                });
+              },
+              isSelected: colored,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildQuentityPart() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        SizedBox(
+          height: 10,
+        ),
+        Text(
+          "Quentity",
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          height: 40,
+          width: 130,
+          decoration: BoxDecoration(
+            color: Color(0xff746bc9),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              GestureDetector(
+                child: Icon(
+                  Icons.remove,
+                  color: Colors.white,
+                ),
+                onTap: () {
+                  setState(() {
+                    if (count > 1) {
+                      count--;
+                    }
+                  });
+                },
+              ),
+              Text(
+                count.toString(),
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              ),
+              GestureDetector(
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
+                onTap: () {
+                  setState(() {
+                    count++;
+                  });
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer2<SingleProductViewModel, AuthViewModel>(
@@ -157,7 +371,7 @@ class _SingleProductBodyState extends State<SingleProductBody> {
                           child: Container(
                             decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(40),
                                 boxShadow: [
                                   BoxShadow(
                                       color: Colors.black.withOpacity(0.1),
@@ -174,7 +388,7 @@ class _SingleProductBodyState extends State<SingleProductBody> {
                               singleProductVM.product!.imageUrl.toString(),
                               height: 400,
                               width: double.infinity,
-                              fit: BoxFit.cover,
+                              // fit: BoxFit.cover,
                               errorBuilder: (BuildContext context,
                                   Object exception, StackTrace? stackTrace) {
                                 return Image.asset(
@@ -188,47 +402,66 @@ class _SingleProductBodyState extends State<SingleProductBody> {
                           ),
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
-                        Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 20),
-                            decoration: BoxDecoration(color: Colors.white70),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Rs. " +
-                                      singleProductVM.product!.productPrice
-                                          .toString(),
-                                  style: TextStyle(
-                                      fontSize: 30,
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.w900),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  singleProductVM.product!.productName
-                                      .toString(),
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  singleProductVM.product!.productDescription
-                                      .toString(),
-                                  style: TextStyle(
-                                    fontSize: 22,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Container(
+                              padding: EdgeInsets.all(10),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(40),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        offset: Offset(0, 10),
+                                        blurRadius: 20,
+                                        spreadRadius: 0),
+                                    BoxShadow(
+                                        color: Colors.white,
+                                        offset: Offset(0, -10),
+                                        blurRadius: 20,
+                                        spreadRadius: 0)
+                                  ]),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Rs. " +
+                                        singleProductVM.product!.productPrice
+                                            .toString(),
+                                    style: TextStyle(
+                                        fontSize: 30,
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.w900),
                                   ),
-                                ),
-                              ],
-                            )),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    singleProductVM.product!.productName
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    singleProductVM.product!.productDescription
+                                        .toString(),
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                    ),
+                                  ),
+                                  _buildColorPart(),
+                                  _buildSizePart()
+                                ],
+                              )),
+                        ),
                         Builder(builder: (context) {
                           CartModel? isCart;
                           try {
@@ -241,7 +474,7 @@ class _SingleProductBodyState extends State<SingleProductBody> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Container(
-                                width: 200,
+                                width: 140,
                                 decoration: BoxDecoration(
                                   color: Colors.deepOrangeAccent,
                                   borderRadius: BorderRadius.circular(10),
@@ -254,12 +487,12 @@ class _SingleProductBodyState extends State<SingleProductBody> {
                                     icon: Icon(
                                       Icons.shopping_cart,
                                       color: isCart != null
-                                          ? Colors.grey
-                                          : Colors.white,
+                                          ? Colors.white
+                                          : Colors.grey,
                                     )),
                               ),
                               Container(
-                                width: 200,
+                                width: 140,
                                 decoration: BoxDecoration(
                                   color: Colors.deepOrangeAccent,
                                   borderRadius: BorderRadius.circular(10),

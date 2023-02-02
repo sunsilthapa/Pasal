@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:n_baz/screens/account/changePassword.dart';
 import 'package:n_baz/screens/account/change_your_email.dart';
 import 'package:n_baz/screens/account/faqs.dart';
 import 'package:n_baz/screens/account/show_profile.dart';
@@ -12,6 +13,7 @@ import 'package:n_baz/screens/auth/register_screen.dart';
 import 'package:n_baz/screens/cart/payment.dart';
 import 'package:n_baz/screens/category/single_category_screen.dart';
 import 'package:n_baz/screens/dashboard/dashboard.dart';
+import 'package:n_baz/screens/dashboard/payee.dart';
 import 'package:n_baz/screens/product/add_product_screen.dart';
 import 'package:n_baz/screens/product/edit_product_screen.dart';
 import 'package:n_baz/screens/product/my_product_screen.dart';
@@ -95,6 +97,9 @@ class MyApp extends StatelessWidget {
                       "/your_profile": (BuildContext context) => ProfileInfo(),
                       "/change_email": (BuildContext context) => ChangeEmail(),
                       "/payment": (BuildContext context) => ePayment(),
+                      "/change_password": (BuildContext context) =>
+                          ChangePasswordScreen(),
+                      // "/project": (BuildContext context) => Project(),
                     },
                     navigatorKey: navKey,
                     localizationsDelegates: const [

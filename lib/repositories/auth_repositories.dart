@@ -74,13 +74,24 @@ class AuthRepository {
     }
   }
 
-  Future<bool?> editEmail(
-      {required UserModel user, required String userId}) async {
-    try {
-      final response = await userRef.doc(userId).set(user);
-      return true;
-    } catch (err) {
-      return false;
-    }
-  }
+  // Future<bool?> editEmail(
+  //     {required UserModel user, required String userId}) async {
+  //   try {
+  //     await userRef.doc(userId).update({
+  //       "email": user.email,
+  //     });
+  //   } catch (err) {
+  //     return false;
+  //   }
+  // }
+
+  // Future<bool?> editPassword(
+  //     {required UserModel user, required String userId}) async {
+  //   try {
+  //     final response = await userRef.doc(userId).set(user);
+  //     return true;
+  //   } catch (err) {
+  //     return false;
+  //   }
+  // }
 }
