@@ -16,7 +16,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   late GlobalUIViewModel _ui;
   late AuthViewModel _authViewModel;
   String? productId;
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {

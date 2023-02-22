@@ -39,7 +39,7 @@ class _CartScreenState extends State<CartScreen> {
       await _authViewModel.cartAction(isCart, productId);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Cart updated."),
+          content: Text("Product deleted."),
           backgroundColor: Colors.deepOrangeAccent,
           behavior: SnackBarBehavior.floating,
           margin: EdgeInsets.all(50),

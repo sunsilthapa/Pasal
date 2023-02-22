@@ -21,14 +21,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
   TextEditingController _usernameController = TextEditingController();
-  TextEditingController _gender = TextEditingController();
 
   bool _obscureTextPassword = true;
   bool _obscureTextPasswordConfirm = true;
-
   late GlobalUIViewModel _ui;
   late AuthViewModel _authViewModel;
-
   @override
   void initState() {
     _ui = Provider.of<GlobalUIViewModel>(context, listen: false);
