@@ -6,21 +6,22 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-ProductModel? productModelFromJson(String str) => ProductModel.fromJson(json.decode(str));
+ProductModel? productModelFromJson(String str) =>
+    ProductModel.fromJson(json.decode(str));
 
 String productModelToJson(ProductModel? data) => json.encode(data!.toJson());
 
 class ProductModel {
-  ProductModel({
-    this.id,
-    this.userId,
-    this.categoryId,
-    this.productName,
-    this.productPrice,
-    this.productDescription,
-    this.imageUrl,
-    this.imagePath,
-  });
+  ProductModel(
+      {this.id,
+      this.userId,
+      this.categoryId,
+      this.productName,
+      this.productPrice,
+      this.productDescription,
+      this.imageUrl,
+      this.imagePath,
+      this.quantity = 1});
 
   String? id;
   String? userId;
@@ -30,40 +31,43 @@ class ProductModel {
   String? productDescription;
   String? imageUrl;
   String? imagePath;
+  int quantity;
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
-    id: json["id"],
-    userId: json["user_id"],
-    categoryId: json["category_id"],
-    productName: json["productName"],
-    productPrice: json["productPrice"].toDouble(),
-    productDescription: json["productDescription"],
-    imageUrl: json["imageUrl"],
-    imagePath: json["imagePath"],
-  );
+        id: json["id"],
+        userId: json["user_id"],
+        categoryId: json["category_id"],
+        productName: json["productName"],
+        productPrice: json["productPrice"].toDouble(),
+        productDescription: json["productDescription"],
+        imageUrl: json["imageUrl"],
+        imagePath: json["imagePath"],
+        quantity: json["_quantity"],
+      );
 
-
-
-  factory ProductModel.fromFirebaseSnapshot(DocumentSnapshot<Map<String, dynamic>> json) => ProductModel(
-    id: json.id,
-    userId: json["user_id"],
-    categoryId: json["category_id"],
-    productName: json["productName"],
-    productPrice: json["productPrice"].toDouble(),
-    productDescription: json["productDescription"],
-    imageUrl: json["imageUrl"],
-    imagePath: json["imagePath"],
-  );
-
+  factory ProductModel.fromFirebaseSnapshot(
+          DocumentSnapshot<Map<String, dynamic>> json) =>
+      ProductModel(
+        id: json.id,
+        userId: json["user_id"],
+        categoryId: json["category_id"],
+        productName: json["productName"],
+        productPrice: json["productPrice"].toDouble(),
+        productDescription: json["productDescription"],
+        imageUrl: json["imageUrl"],
+        imagePath: json["imagePath"],
+        quantity: json["_quantity"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "user_id": userId,
-    "category_id": categoryId,
-    "productName": productName,
-    "productPrice": productPrice,
-    "productDescription": productDescription,
-    "imageUrl": imageUrl,
-    "imagePath": imagePath,
-  };
+        "id": id,
+        "user_id": userId,
+        "category_id": categoryId,
+        "productName": productName,
+        "productPrice": productPrice,
+        "productDescription": productDescription,
+        "imageUrl": imageUrl,
+        "imagePath": imagePath,
+        "_quantity": quantity,
+      };
 }

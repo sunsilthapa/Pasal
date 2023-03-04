@@ -38,7 +38,7 @@ class _OnboardingScreenOneState extends State<OnboardingScreenOne> {
   @override
   void initState() {
     _authViewModel = Provider.of<AuthViewModel>(context, listen: false);
-    checkLogin();
+    // checkLogin();
     super.initState();
   }
 

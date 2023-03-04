@@ -39,6 +39,7 @@ class _MyProductScreenState extends State<MyProductScreen> {
     return Consumer<AuthViewModel>(builder: (context, authVM, child) {
       return Scaffold(
         floatingActionButton: FloatingActionButton.extended(
+          backgroundColor: Colors.deepOrangeAccent,
           label: Text("Add Product"),
           icon: Icon(Icons.add),
           onPressed: () {
@@ -46,7 +47,7 @@ class _MyProductScreenState extends State<MyProductScreen> {
           },
         ),
         appBar: AppBar(
-          backgroundColor: Colors.black54,
+          backgroundColor: Colors.deepOrangeAccent,
           title: Text("My Products"),
         ),
         body: RefreshIndicator(

@@ -10,14 +10,14 @@ import '../../services/firebase_service.dart';
 import '../../viewmodels/auth_viewmodel.dart';
 import '../../viewmodels/global_ui_viewmodel.dart';
 
-class ChangeEmail extends StatefulWidget {
-  const ChangeEmail({Key? key}) : super(key: key);
+class ChangeAddress extends StatefulWidget {
+  const ChangeAddress({Key? key}) : super(key: key);
 
   @override
-  State<ChangeEmail> createState() => _ChangeEmailState();
+  State<ChangeAddress> createState() => _ChangeAddressState();
 }
 
-class _ChangeEmailState extends State<ChangeEmail> {
+class _ChangeAddressState extends State<ChangeAddress> {
   late GlobalUIViewModel _ui;
   late AuthViewModel _authViewModel;
   String? userId;
@@ -27,14 +27,34 @@ class _ChangeEmailState extends State<ChangeEmail> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _ui = Provider.of<GlobalUIViewModel>(context, listen: false);
       _authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+      // final args = ModalRoute.of(context)!.settings.arguments;
+      // print(args);
+      // FirebaseFirestore db = FirebaseFirestore.instance;
+      // db.collection("users").doc(args.toString()).get().then((data) {
+      //   prev_addressController.text = data["address"];
+      // });
     });
     super.initState();
   }
+  // Future<void> addProduct() async {
+  //   FirebaseFirestore db = FirebaseFirestore.instance;
+  //   final data = {
+  //     "address": new_addressController.text,
+  //   };
+  //   final args = ModalRoute.of(context)!.settings.arguments;
+  //   db.collection("users").doc(args.toString()).set(data).then(
+  //         (value) => ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text("Address Updated"),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   void editAddress() async {
     _ui.loadState(true);
     try {
-      _authViewModel.user?.updateEmail(new_addressController.text);
+      // _authViewModel.user?.updatePhoneNumber(new_addressController.text);
       FirebaseService.db
           .collection("users")
           .where("user_id", isEqualTo: _authViewModel.user?.uid)
@@ -76,7 +96,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
       return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Change your Email'),
+          title: Text('Change your Address'),
           backgroundColor: Colors.deepOrange,
         ),
         body: Container(
@@ -117,7 +137,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
                         controller: prev_addressController,
                         validator: (value) {
                           if (value != null || value!.isEmpty) {
-                            return "Invalid email";
+                            return "Invalid address";
                           }
                         },
                         keyboardType: TextInputType.emailAddress,

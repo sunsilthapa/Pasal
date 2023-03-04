@@ -75,83 +75,85 @@ class _HomeScreenState extends State<HomeScreen> {
       return Container(
         child: Stack(
           children: [
-            HomeHeader(authVM),
             Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Color(0xFFF57C00),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(35),
-                    topLeft: Radius.circular(35),
+              child: ListView(children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFFF57C00),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(35),
+                      topLeft: Radius.circular(35),
+                    ),
                   ),
-                ),
-                margin: EdgeInsets.only(top: 80),
-                child: RefreshIndicator(
-                  onRefresh: refresh,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                            padding: EdgeInsets.only(top: 10),
-                            child: CarouselSlider(
-                              options: CarouselOptions(
-                                height: 200,
-                                aspectRatio: 16 / 9,
-                                viewportFraction: 1,
-                                enlargeCenterPage: true,
-                                enableInfiniteScroll: false,
-                                // autoPlayAnimationDuration: Duration(seconds: 1),
-                                // autoPlay: true,
+                  margin: EdgeInsets.only(top: 80),
+                  child: RefreshIndicator(
+                    onRefresh: refresh,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                              padding: EdgeInsets.only(top: 10),
+                              child: CarouselSlider(
+                                options: CarouselOptions(
+                                  height: 200,
+                                  aspectRatio: 16 / 9,
+                                  viewportFraction: 1,
+                                  enlargeCenterPage: true,
+                                  enableInfiniteScroll: false,
+                                  // autoPlayAnimationDuration: Duration(seconds: 1),
+                                  // autoPlay: true,
+                                ),
+                                items: imageSliders,
+                              )),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 0),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  ...categoryVM.categories
+                                      .map((e) => CategoryCard(e))
+                                ],
                               ),
-                              items: imageSliders,
-                            )),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Container(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Container(
+                              margin: EdgeInsets.symmetric(horizontal: 20),
+                              child: Text(
+                                "Products",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              )),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 10),
+                            child: GridView.count(
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 0.7,
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              crossAxisCount: 2,
                               children: [
-                                ...categoryVM.categories
-                                    .map((e) => CategoryCard(e))
+                                ...productVM.products.map((e) => ProductCard(e))
                               ],
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Container(
-                            margin: EdgeInsets.symmetric(horizontal: 20),
-                            child: Text(
-                              "Products",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            )),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 10),
-                          child: GridView.count(
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            childAspectRatio: 0.7,
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            crossAxisCount: 2,
-                            children: [
-                              ...productVM.products.map((e) => ProductCard(e))
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ]),
             ),
+            HomeHeader(authVM),
           ],
         ),
       );
@@ -183,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
             width: double.infinity,
             height: 60,
             decoration: BoxDecoration(
-              color: Colors.transparent,
+              color: Colors.white,
             ),
             padding: EdgeInsets.all(15),
             child: Row(
@@ -201,60 +203,75 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontWeight: FontWeight.bold,
                       color: Colors.deepOrangeAccent),
                 ),
-                Spacer(),
+                // Spacer(),
+                SizedBox(
+                  width: 20.0,
+                ),
                 Container(
-                  width: 130,
-                  child: TextFormField(
-                    controller: _searchController,
-                    // autofocus: true,
-                    cursorColor: Colors.deepOrangeAccent,
-                    cursorHeight: 20,
-                    keyboardType: TextInputType.text,
-                    style: const TextStyle(
-                        fontSize: 16.0, color: Colors.deepOrangeAccent),
-                    decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey.shade300,
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide.none),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide.none),
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            performSearch();
-                          },
-                          child: Icon(
-                            Icons.search,
-                            size: 21.0,
-                            color: Colors.deepOrangeAccent,
+                  width: 140,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 2.0),
+                    child: TextFormField(
+                      controller: _searchController,
+                      // autofocus: true,
+                      cursorColor: Colors.deepOrangeAccent,
+                      cursorHeight: 16,
+                      keyboardType: TextInputType.text,
+                      style: const TextStyle(
+                          fontSize: 12.0, color: Colors.deepOrangeAccent),
+                      decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey.shade300,
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide.none),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide.none),
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              performSearch();
+                            },
+                            child: Icon(
+                              Icons.search,
+                              size: 21.0,
+                              color: Colors.deepOrangeAccent,
+                            ),
                           ),
-                        ),
-                        hintText: "Search",
-                        hintStyle: TextStyle(fontSize: 12.0)),
+                          hintText: "Search",
+                          hintStyle: TextStyle(fontSize: 12.0)),
+                    ),
                   ),
                 ),
-                Badge(
-                  badgeColor: Colors.red,
-                  padding: EdgeInsets.all(7),
-                  badgeContent: Text(
-                    "3",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Icon(
-                      Icons.shopping_bag_outlined,
-                      size: 30,
-                      color: Color(0xFFF57C00),
-                    ),
-                  ),
-                )
+                SizedBox(
+                  width: 10.0,
+                ),
+                Badgee(authVM)
               ],
             )));
+  }
+
+  Widget Badgee(AuthViewModel authVM) {
+    return Badge(
+      badgeColor: Colors.red,
+      padding: EdgeInsets.all(7),
+      badgeContent: Text(
+        authVM.cartProduct!.length.toString(),
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).pushNamed("/cart");
+        },
+        child: Icon(
+          Icons.shopping_bag_outlined,
+          size: 30,
+          color: Color(0xFFF57C00),
+        ),
+      ),
+    );
   }
 
   Widget WelcomeText(AuthViewModel authVM) {
@@ -302,12 +319,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: double.infinity,
                   // height: 10,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Colors.deepOrangeAccent),
-                  child: Text(
-                    e.categoryName.toString() + "\n",
-                    maxLines: 1,
-                    style: TextStyle(color: Colors.white),
+                    borderRadius: BorderRadius.circular(5),
+                    color: Color(0xFFF57C00),
+                  ),
+                  child: Center(
+                    child: Text(
+                      e.categoryName.toString() + "\n",
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.white),
+                    ),
                   )),
             ),
           ],

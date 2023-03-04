@@ -106,14 +106,14 @@ class _CartScreenState extends State<CartScreen> {
                                           child: TextButton(
                                             onPressed: () {
                                               setState(() {
-                                                _quantity--;
+                                                e.quantity--;
                                               });
                                             },
                                             child: Text("- "),
                                           ),
                                         ),
                                         SizedBox(width: 4),
-                                        Text("$_quantity"),
+                                        Text(e.quantity.toString()),
                                         SizedBox(width: 5),
                                         SizedBox(
                                           width: 25,
@@ -121,7 +121,7 @@ class _CartScreenState extends State<CartScreen> {
                                           child: TextButton(
                                             onPressed: () {
                                               setState(() {
-                                                _quantity++;
+                                                e.quantity++;
                                               });
                                             },
                                             child: Text("+"),
@@ -162,13 +162,14 @@ class _CartScreenState extends State<CartScreen> {
                                         },
                                       )),
                                   title: Text(e.productName.toString()),
-                                  subtitle: Text(
-                                      (e.productPrice! * _quantity).toString()),
+                                  subtitle: Text((e.productPrice).toString()),
                                 ),
                               ),
                             ),
                           ),
                         ),
+                        Text("Total Products : " +
+                            authVM.cartProduct!.length.toString())
                       ]),
           ),
         ),

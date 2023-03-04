@@ -62,9 +62,17 @@ class _SingleCategoryBodyState extends State<SingleCategoryBody> {
         child: singleCategoryVM.category == null
             ? Text("Please wait")
             : Scaffold(
-                backgroundColor: Colors.deepOrangeAccent,
+                // backgroundColor: Color(0xFFF57C00),
+                backgroundColor: Colors.white,
                 appBar: AppBar(
-                  backgroundColor: Colors.transparent,
+                  elevation: 1,
+                  backgroundColor: Color(0xFFF57C00),
+                  centerTitle: true,
+                  title: Text(
+                    singleCategoryVM.category!.categoryName.toString(),
+                    style:
+                        TextStyle(fontSize: 22.0, fontWeight: FontWeight.w700),
+                  ),
                 ),
                 body: RefreshIndicator(
                   onRefresh: () => getData(categoryId.toString()),
@@ -144,6 +152,14 @@ class _SingleCategoryBodyState extends State<SingleCategoryBody> {
         decoration: BoxDecoration(
           color: Color(0xFFFAB540),
           borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 2,
+              blurRadius: 17,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

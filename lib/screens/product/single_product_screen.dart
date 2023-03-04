@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:n_baz/models/favorite_model.dart';
 import 'package:n_baz/viewmodels/auth_viewmodel.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../models/cart_model.dart';
 import '../../viewmodels/global_ui_viewmodel.dart';
@@ -358,7 +359,22 @@ class _SingleProductBodyState extends State<SingleProductBody> {
                                   ? Colors.red
                                   : Colors.white,
                             ));
-                      })
+                      }),
+                      SizedBox(
+                        width: 2,
+                      ),
+                      GestureDetector(
+                        onTap: () => Share.share(
+                            singleProductVM.product!.imageUrl.toString()),
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 12.0),
+                          child: Icon(
+                            Icons.share,
+                            size: 25,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   backgroundColor: Color(0xFFf5f5f4),

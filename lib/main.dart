@@ -7,9 +7,11 @@ import 'package:n_baz/screens/account/changePassword.dart';
 import 'package:n_baz/screens/account/change_your_email.dart';
 import 'package:n_baz/screens/account/faqs.dart';
 import 'package:n_baz/screens/account/show_profile.dart';
+import 'package:n_baz/screens/auth/changeAddress.dart';
 import 'package:n_baz/screens/auth/forget_password_screen.dart';
 import 'package:n_baz/screens/auth/login_screen.dart';
 import 'package:n_baz/screens/auth/register_screen.dart';
+import 'package:n_baz/screens/cart/cart.dart';
 import 'package:n_baz/screens/cart/payment.dart';
 import 'package:n_baz/screens/category/single_category_screen.dart';
 import 'package:n_baz/screens/dashboard/dashboard.dart';
@@ -97,8 +99,11 @@ class MyApp extends StatelessWidget {
                       "/your_profile": (BuildContext context) => ProfileInfo(),
                       "/change_email": (BuildContext context) => ChangeEmail(),
                       "/payment": (BuildContext context) => ePayment(),
+                      "/cart": (BuildContext context) => CartScreen(),
                       "/change_password": (BuildContext context) =>
                           ChangePasswordScreen(),
+                      "/change_address": (BuildContext context) =>
+                          ChangeAddress(),
                       // "/project": (BuildContext context) => Project(),
                     },
                     navigatorKey: navKey,
