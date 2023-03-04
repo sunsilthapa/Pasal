@@ -385,9 +385,11 @@ class _SingleProductBodyState extends State<SingleProductBody> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 10),
                           child: Container(
+                            height: 415,
+                            width: MediaQuery.of(context).size.width * 0.9,
                             decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(40),
+                                borderRadius: BorderRadius.circular(20),
                                 boxShadow: [
                                   BoxShadow(
                                       color: Colors.black.withOpacity(0.1),
@@ -400,20 +402,23 @@ class _SingleProductBodyState extends State<SingleProductBody> {
                                       blurRadius: 20,
                                       spreadRadius: 0)
                                 ]),
-                            child: Image.network(
-                              singleProductVM.product!.imageUrl.toString(),
-                              height: 400,
-                              width: double.infinity,
-                              // fit: BoxFit.cover,
-                              errorBuilder: (BuildContext context,
-                                  Object exception, StackTrace? stackTrace) {
-                                return Image.asset(
-                                  'assets/images/logo.png',
-                                  height: 400,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                );
-                              },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.network(
+                                singleProductVM.product!.imageUrl.toString(),
+                                height: 400,
+                                width: MediaQuery.of(context).size.width * 0.7,
+                                // fit: BoxFit.cover,
+                                errorBuilder: (BuildContext context,
+                                    Object exception, StackTrace? stackTrace) {
+                                  return Image.asset(
+                                    'assets/images/logo.png',
+                                    height: 400,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),
@@ -427,7 +432,7 @@ class _SingleProductBodyState extends State<SingleProductBody> {
                               padding: EdgeInsets.all(10),
                               width: double.infinity,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(40),
+                                  borderRadius: BorderRadius.circular(20),
                                   color: Colors.white,
                                   boxShadow: [
                                     BoxShadow(

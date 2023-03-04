@@ -74,6 +74,7 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text("Your Profile"),
         backgroundColor: Colors.deepOrange,
@@ -106,7 +107,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Widget colorTiles() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 25),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -170,25 +171,6 @@ class _AccountScreenState extends State<AccountScreen> {
                 Navigator.of(context).pushNamed("/change_password");
               },
             ),
-            divider(),
-            ListTile(
-              leading: Container(
-                child: Icon(Icons.location_city, color: Colors.orange),
-                height: 30,
-                width: 30,
-                decoration: BoxDecoration(
-                  color: Colors.orange.withOpacity(0.09),
-                  borderRadius: BorderRadius.circular(18),
-                ),
-              ),
-              title: Text("Change your address",
-                  style: TextStyle(fontWeight: FontWeight.w700)),
-              trailing: Icon(Icons.arrow_forward_ios,
-                  color: Colors.deepOrange, size: 20),
-              onTap: () {
-                Navigator.of(context).pushNamed("/change_address");
-              },
-            ),
           ],
         ),
       ),
@@ -199,7 +181,7 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget bwTiles() {
     Color color = Colors.black;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -207,25 +189,6 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
         child: Column(
           children: [
-            ListTile(
-              leading: Container(
-                child: Icon(Icons.history, color: color),
-                height: 30,
-                width: 30,
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.09),
-                  borderRadius: BorderRadius.circular(18),
-                ),
-              ),
-              title: Text("Order History",
-                  style: TextStyle(fontWeight: FontWeight.w700)),
-              trailing: Icon(Icons.arrow_forward_ios,
-                  color: Colors.deepOrange, size: 20),
-              onTap: () {
-                Navigator.of(context).pushNamed("/history");
-              },
-            ),
-            divider(),
             ListTile(
               leading: Container(
                 child: Icon(Icons.notification_add, color: color),
